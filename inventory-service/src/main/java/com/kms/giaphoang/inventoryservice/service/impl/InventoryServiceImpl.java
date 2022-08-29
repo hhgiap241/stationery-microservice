@@ -1,9 +1,14 @@
 package com.kms.giaphoang.inventoryservice.service.impl;
 
+import com.kms.giaphoang.inventoryservice.dto.InventoryDto;
+import com.kms.giaphoang.inventoryservice.model.Inventory;
 import com.kms.giaphoang.inventoryservice.repository.InventoryRepository;
 import com.kms.giaphoang.inventoryservice.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author : giaphoang
@@ -16,7 +21,16 @@ import org.springframework.stereotype.Service;
 public class InventoryServiceImpl implements InventoryService {
     private final InventoryRepository inventoryRepository;
     @Override
-    public Boolean isInStock(String skuCode) {
-        return inventoryRepository.findBySkuCode(skuCode).isPresent();
+    public List<Inventory> isInStock(List<String> skuCode) {
+        return inventoryRepository.findBySkuCodeIn(skuCode);
+    }
+
+    @Override
+    public String saveInventory(InventoryDto inventoryDto) {
+        Inventory inventory = Inventory.builder()
+                .skuCode(inventoryDto.getSkuCode())
+                .quantity(inventoryDto.getQuantity())
+                .build();
+        return inventoryRepository.save(inventory).getId().toString();
     }
 }

@@ -1,5 +1,6 @@
 package com.kms.giaphoang.orderservice.service.impl;
 
+import com.kms.giaphoang.orderservice.dto.InventoryDto;
 import com.kms.giaphoang.orderservice.dto.OrderDto;
 import com.kms.giaphoang.orderservice.model.Order;
 import com.kms.giaphoang.orderservice.model.OrderLineItems;
@@ -7,7 +8,9 @@ import com.kms.giaphoang.orderservice.repository.OrderRepository;
 import com.kms.giaphoang.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -22,6 +25,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
+    private final WebClient webClient;
+
     @Override
     public String placeOrder(OrderDto orderDto) {
         final List<OrderLineItems> orderLineItems = orderDto.getOrderLineItemsDtoList().stream()
@@ -35,6 +40,22 @@ public class OrderServiceImpl implements OrderService {
                 .orderNumber(UUID.randomUUID().toString())
                 .orderLineItemsList(orderLineItems)
                 .build();
-        return orderRepository.save(order).getId().toString();
+        final List<String> skuCodeList = order.getOrderLineItemsList().stream()
+                .map(OrderLineItems::getSkuCode)
+                .collect(Collectors.toList());
+        // call inventory service to check if this product is available
+        final InventoryDto[] inventoryDtos = webClient.get()
+                .uri("http://localhost:8082/api/v1/inventory",
+                        uriBuilder -> uriBuilder.queryParam("skuCode", skuCodeList).build())
+                .retrieve()
+                .bodyToMono(InventoryDto[].class)
+                .block();
+        final boolean allProductInStock = Arrays.stream(inventoryDtos).allMatch(InventoryDto::getIsInStock);
+        if (allProductInStock) {
+            return orderRepository.save(order).getId().toString();
+        } else {
+            throw new IllegalArgumentException("Product is not available");
+        }
+
     }
 }
