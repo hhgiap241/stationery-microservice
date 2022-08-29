@@ -1,12 +1,14 @@
 package com.kms.giaphoang.inventoryservice.controller;
 
+import com.kms.giaphoang.inventoryservice.dto.InventoryDto;
+import com.kms.giaphoang.inventoryservice.model.Inventory;
 import com.kms.giaphoang.inventoryservice.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author : giaphoang
@@ -17,10 +19,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/inventory")
-public class InventoryController {
+public class InventoryController extends AbstractApplicationController {
     private final InventoryService inventoryService;
-    @GetMapping("/{sku-code}")
-    public ResponseEntity<Boolean> isInStock(@PathVariable("sku-code") String skuCode){
-        return ResponseEntity.ok(inventoryService.isInStock(skuCode));
+
+    @GetMapping
+    public ResponseEntity<List<InventoryDto>> isInStock(@RequestParam List<String> skuCode) {
+        final List<Inventory> inventoryList = inventoryService.isInStock(skuCode);
+        return ResponseEntity.ok(inventoryList.stream()
+                .map(mapper::toInventoryDto)
+                .collect(Collectors.toList()));
+    }
+    @PostMapping
+    public ResponseEntity<String> saveInventory(@RequestBody InventoryDto inventoryDto){
+        return ResponseEntity.ok(inventoryService.saveInventory(inventoryDto));
     }
 }

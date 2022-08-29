@@ -1,5 +1,10 @@
 package com.kms.giaphoang.inventoryservice.service;
 
+import com.kms.giaphoang.inventoryservice.dto.InventoryDto;
+import com.kms.giaphoang.inventoryservice.model.Inventory;
+
+import java.util.List;
+
 /**
  * @author : giaphoang
  * @mailto : hoanghuugiap241@gmail.com
@@ -7,5 +12,6 @@ package com.kms.giaphoang.inventoryservice.service;
  * @project: spring-boot-stationery
  **/
 public interface InventoryService {
-    public Boolean isInStock(String skuCode);
+    public List<Inventory> isInStock(List<String> skuCode);
+    public String saveInventory(InventoryDto inventoryDto);
 }
