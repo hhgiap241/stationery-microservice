@@ -23,6 +23,23 @@ services:
       MYSQL_PASSWORD: admin
       MYSQL_ROOT_PASSWORD: root
 
+  keycloak:
+    image: jboss/keycloak:16.1.1
+    environment:
+      DB_VENDOR: MYSQL
+      DB_ADDR: mysql
+      DB_DATABASE: keycloak
+      DB_USER: admin
+      DB_PASSWORD: admin
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+    ports:
+      - "8180:8080"
+    depends_on:
+      - mysql
+
+
+
 volumes:
   data:
   mysql_data_1:
