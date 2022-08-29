@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
     @Override
     public String placeOrder(OrderDto orderDto) {
@@ -44,8 +44,8 @@ public class OrderServiceImpl implements OrderService {
                 .map(OrderLineItems::getSkuCode)
                 .collect(Collectors.toList());
         // call inventory service to check if this product is available
-        final InventoryDto[] inventoryDtos = webClient.get()
-                .uri("http://localhost:8082/api/v1/inventory",
+        final InventoryDto[] inventoryDtos = webClientBuilder.build().get()
+                .uri("http://inventory-service/api/v1/inventory",
                         uriBuilder -> uriBuilder.queryParam("skuCode", skuCodeList).build())
                 .retrieve()
                 .bodyToMono(InventoryDto[].class)
@@ -56,6 +56,5 @@ public class OrderServiceImpl implements OrderService {
         } else {
             throw new IllegalArgumentException("Product is not available");
         }
-
     }
 }
