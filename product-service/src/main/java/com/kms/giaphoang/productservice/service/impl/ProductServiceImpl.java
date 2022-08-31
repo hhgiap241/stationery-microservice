@@ -29,7 +29,9 @@ public class ProductServiceImpl implements ProductService {
     public String saveProduct(ProductDto productDto) {
         Category category = categoryRepository.findById(productDto.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException("Category " + productDto.getCategoryId() + " not found."));
-
+        productRepository.findByName(productDto.getName()).ifPresent(product -> {
+            throw new ProductNotFoundException("Product " + productDto.getName() + " already existed.");
+        });
         Product product = Product.builder()
                 .name(productDto.getName())
                 .url(productDto.getUrl())

@@ -14,4 +14,6 @@ import java.util.List;
 public interface InventoryService {
     public List<Inventory> isInStock(List<String> skuCode);
     public String saveInventory(InventoryDto inventoryDto);
+    String updateInventory(InventoryDto inventoryDto);
+    Inventory getInventoryBySkuCode(String skuCode);
 }
