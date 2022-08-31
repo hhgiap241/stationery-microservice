@@ -28,6 +28,11 @@ public class CategoryController extends AbstractApplicationController{
                 .collect(Collectors.toList());
         return ResponseEntity.ok(categoryList);
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable String id){
+        final CategoryDto categoryDto = mapper.toCategoryDto(categoryService.getCategoryById(id));
+        return ResponseEntity.ok(categoryDto);
+    }
     @PostMapping
     public ResponseEntity<String> saveCategory(@RequestBody CategoryDto categoryDto){
         return ResponseEntity.ok(categoryService.saveCategory(categoryDto));

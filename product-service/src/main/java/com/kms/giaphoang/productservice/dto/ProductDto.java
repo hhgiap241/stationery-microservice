@@ -22,7 +22,7 @@ public class ProductDto {
     private String name;
     private String url;
     private String description;
-    private Integer quantity;
+    private String skuCode;
     private Double price;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

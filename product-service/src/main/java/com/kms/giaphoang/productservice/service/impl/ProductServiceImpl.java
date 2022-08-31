@@ -2,6 +2,7 @@ package com.kms.giaphoang.productservice.service.impl;
 
 import com.kms.giaphoang.productservice.dto.ProductDto;
 import com.kms.giaphoang.productservice.exception.CategoryNotFoundException;
+import com.kms.giaphoang.productservice.exception.ProductNotFoundException;
 import com.kms.giaphoang.productservice.model.Category;
 import com.kms.giaphoang.productservice.model.Product;
 import com.kms.giaphoang.productservice.repository.CategoryRepository;
@@ -33,15 +34,39 @@ public class ProductServiceImpl implements ProductService {
                 .name(productDto.getName())
                 .url(productDto.getUrl())
                 .description(productDto.getDescription())
-                .quantity(productDto.getQuantity())
+                .skuCode(productDto.getName().replace(" ", "_"))
                 .price(productDto.getPrice())
                 .category(category)
                 .build();
         return productRepository.save(product).getId();
     }
-
     @Override
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+    }
+    @Override
+    public Product getProductBySkuCode(String skuCode) {
+        return productRepository.findBySkuCode(skuCode)
+                .orElseThrow(() -> new ProductNotFoundException("Product " + skuCode + " not found."));
+    }
+    @Override
+    public String updateProduct(String skuCode, ProductDto productDto) {
+        final Product product = productRepository.findBySkuCode(skuCode)
+                .orElseThrow(() -> new ProductNotFoundException("Product " + skuCode + " not found."));
+        Category category = categoryRepository.findById(productDto.getCategoryId())
+                        .orElseThrow(() -> new CategoryNotFoundException("Category " + productDto.getCategoryId() + " not found."));
+        product.setName(productDto.getName());
+        product.setSkuCode(productDto.getName().replace(" ", "_"));
+        product.setUrl(productDto.getUrl());
+        product.setDescription(productDto.getDescription());
+        product.setPrice(productDto.getPrice());
+        product.setCategory(category);
+        return productRepository.save(product).getId();
+    }
+    @Override
+    public void deleteProduct(String skuCode) {
+        final Product product = productRepository.findBySkuCode(skuCode)
+                .orElseThrow(() -> new ProductNotFoundException("Product " + skuCode + " not found."));
+        productRepository.delete(product);
     }
 }
