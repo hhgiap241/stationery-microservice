@@ -29,8 +29,17 @@ public class InventoryController extends AbstractApplicationController {
                 .map(mapper::toInventoryDto)
                 .collect(Collectors.toList()));
     }
+    @GetMapping("/{skuCode}")
+    public ResponseEntity<InventoryDto> getInventoryBySkuCode(@PathVariable String skuCode) {
+        final Inventory inventory = inventoryService.getInventoryBySkuCode(skuCode);
+        return ResponseEntity.ok(mapper.toInventoryDto(inventory));
+    }
     @PostMapping
     public ResponseEntity<String> saveInventory(@RequestBody InventoryDto inventoryDto){
         return ResponseEntity.ok(inventoryService.saveInventory(inventoryDto));
+    }
+    @PutMapping
+    public ResponseEntity<String> updateInventory(@RequestBody InventoryDto inventoryDto){
+        return ResponseEntity.ok(inventoryService.updateInventory(inventoryDto));
     }
 }

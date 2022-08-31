@@ -2,6 +2,7 @@ package com.kms.giaphoang.productservice.controller;
 
 import com.kms.giaphoang.productservice.exception.CategoryExistedException;
 import com.kms.giaphoang.productservice.exception.CategoryNotFoundException;
+import com.kms.giaphoang.productservice.exception.ProductExistedException;
 import com.kms.giaphoang.productservice.exception.ProductNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ import java.util.Map;
 @Slf4j
 @RestControllerAdvice
 public class ExceptionController {
-    private static final String ERROR_MESSAGE = "Error: ";
+    private static final String ERROR_MESSAGE = "Product_Error: ";
 
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleCategoryNotFoundException(CategoryNotFoundException e) {
@@ -36,6 +37,11 @@ public class ExceptionController {
     }
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleProductNotFoundException(ProductNotFoundException e) {
+        log.error(e.getMessage());
+        return ResponseEntity.badRequest().body(Map.of(ERROR_MESSAGE, e.getMessage()));
+    }
+    @ExceptionHandler(ProductExistedException.class)
+    public ResponseEntity<Map<String, String>> handleProductExistedException(ProductExistedException e) {
         log.error(e.getMessage());
         return ResponseEntity.badRequest().body(Map.of(ERROR_MESSAGE, e.getMessage()));
     }
