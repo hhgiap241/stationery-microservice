@@ -14,4 +14,9 @@ import java.util.List;
 public interface ProductService {
     public List<Product> getAllProducts();
     public String saveProduct(ProductDto productDto);
+
+    Product getProductBySkuCode(String skuCode);
+
+    String updateProduct(String skuCode, ProductDto productDto);
+    void deleteProduct(String skuCode);
 }

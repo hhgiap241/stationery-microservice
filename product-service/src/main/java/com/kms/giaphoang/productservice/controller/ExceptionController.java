@@ -1,6 +1,8 @@
 package com.kms.giaphoang.productservice.controller;
 
+import com.kms.giaphoang.productservice.exception.CategoryExistedException;
 import com.kms.giaphoang.productservice.exception.CategoryNotFoundException;
+import com.kms.giaphoang.productservice.exception.ProductNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -27,19 +29,16 @@ public class ExceptionController {
         log.error(e.getMessage());
         return ResponseEntity.badRequest().body(Map.of(ERROR_MESSAGE, e.getMessage()));
     }
-
-//    @ExceptionHandler(ProductNotFoundException.class)
-//    public ResponseEntity<Map<String, String>> handleProductNotFoundException(ProductNotFoundException e) {
-//        log.error(e.getMessage());
-//        return ResponseEntity.badRequest().body(Map.of(ERROR_MESSAGE, e.getMessage()));
-//    }
-
-//    @ExceptionHandler(CategoryExistedException.class)
-//    public ResponseEntity<Map<String, String>> handleCategoryExistedException(CategoryExistedException e) {
-//        log.error(e.getMessage());
-//        return ResponseEntity.badRequest().body(Map.of(ERROR_MESSAGE, e.getMessage()));
-//    }
-
+    @ExceptionHandler(CategoryExistedException.class)
+    public ResponseEntity<Map<String, String>> handleCategoryExistedException(CategoryExistedException e) {
+        log.error(e.getMessage());
+        return ResponseEntity.badRequest().body(Map.of(ERROR_MESSAGE, e.getMessage()));
+    }
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleProductNotFoundException(ProductNotFoundException e) {
+        log.error(e.getMessage());
+        return ResponseEntity.badRequest().body(Map.of(ERROR_MESSAGE, e.getMessage()));
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgumentValidationException(MethodArgumentNotValidException e) {
@@ -52,15 +51,4 @@ public class ExceptionController {
         });
         return ResponseEntity.badRequest().body(errors);
     }
-
-//    @ExceptionHandler(ConstraintViolationException.class)
-//    public ResponseEntity<Map<String, String>> handleConstraintViolationException(ConstraintViolationException e) {
-//        Map<String, String> errors = new HashMap<>();
-//        e.getConstraintViolations().forEach(error -> {
-//            String fieldName = error.getPropertyPath().toString();
-//            String errorMessage = error.getMessage();
-//            errors.put(fieldName, errorMessage);
-//        });
-//        return ResponseEntity.badRequest().body(errors);
-//    }
 }

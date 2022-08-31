@@ -29,7 +29,7 @@ public class Product {
     private String name;
     private String url;
     private String description;
-    private Integer quantity;
+    private String skuCode;
     private Double price;
     @CreatedDate
     private LocalDateTime createdAt;

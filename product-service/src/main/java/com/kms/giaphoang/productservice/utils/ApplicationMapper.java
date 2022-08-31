@@ -20,7 +20,7 @@ public class ApplicationMapper {
                 .name(product.getName())
                 .url(product.getUrl())
                 .description(product.getDescription())
-                .quantity(product.getQuantity())
+                .skuCode(product.getSkuCode())
                 .price(product.getPrice())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
