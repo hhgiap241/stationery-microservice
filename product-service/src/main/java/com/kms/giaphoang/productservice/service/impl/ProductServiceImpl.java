@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author : giaphoang
@@ -25,6 +26,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+
     @Override
     public String saveProduct(ProductDto productDto) {
         Category category = categoryRepository.findById(productDto.getCategoryId())
@@ -42,21 +44,24 @@ public class ProductServiceImpl implements ProductService {
                 .build();
         return productRepository.save(product).getId();
     }
+
     @Override
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
+
     @Override
     public Product getProductBySkuCode(String skuCode) {
         return productRepository.findBySkuCode(skuCode)
                 .orElseThrow(() -> new ProductNotFoundException("Product " + skuCode + " not found."));
     }
+
     @Override
     public String updateProduct(String skuCode, ProductDto productDto) {
         final Product product = productRepository.findBySkuCode(skuCode)
                 .orElseThrow(() -> new ProductNotFoundException("Product " + skuCode + " not found."));
         Category category = categoryRepository.findById(productDto.getCategoryId())
-                        .orElseThrow(() -> new CategoryNotFoundException("Category " + productDto.getCategoryId() + " not found."));
+                .orElseThrow(() -> new CategoryNotFoundException("Category " + productDto.getCategoryId() + " not found."));
         product.setName(productDto.getName());
         product.setSkuCode(productDto.getName().replace(" ", "_"));
         product.setUrl(productDto.getUrl());
@@ -65,10 +70,21 @@ public class ProductServiceImpl implements ProductService {
         product.setCategory(category);
         return productRepository.save(product).getId();
     }
+
     @Override
     public void deleteProduct(String skuCode) {
         final Product product = productRepository.findBySkuCode(skuCode)
                 .orElseThrow(() -> new ProductNotFoundException("Product " + skuCode + " not found."));
         productRepository.delete(product);
+    }
+
+    @Override
+    public List<Product> findProductsByCategory(String categoryName) {
+        if (categoryName.equals("All")) {
+            return productRepository.findAll();
+        }
+        final Category category = categoryRepository.findByName(categoryName)
+                .orElseThrow(() -> new CategoryNotFoundException("Category " + categoryName + " not found."));
+        return productRepository.findByCategory(category);
     }
 }

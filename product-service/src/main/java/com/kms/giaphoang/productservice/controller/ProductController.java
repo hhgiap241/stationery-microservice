@@ -39,6 +39,13 @@ public class ProductController extends AbstractApplicationController{
         final ProductDto productDto = mapper.toProductDto(productService.getProductBySkuCode(skuCode));
         return ResponseEntity.ok(productDto);
     }
+    @GetMapping("/filter")
+    public ResponseEntity<List<ProductDto>> findProductByCategory(@RequestParam String category){
+        final List<ProductDto> products = productService.findProductsByCategory(category).stream()
+                .map(mapper::toProductDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(products);
+    }
     @PutMapping("/{skuCode}")
     public ResponseEntity<String> updateProduct(@PathVariable String skuCode, @RequestBody ProductDto productDto){
         final String productId = productService.updateProduct(skuCode, productDto);

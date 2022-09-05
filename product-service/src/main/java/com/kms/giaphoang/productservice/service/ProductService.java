@@ -13,6 +13,7 @@ import java.util.List;
  **/
 public interface ProductService {
     public List<Product> getAllProducts();
+    List<Product> findProductsByCategory(String categoryName);
     public String saveProduct(ProductDto productDto);
 
     Product getProductBySkuCode(String skuCode);
