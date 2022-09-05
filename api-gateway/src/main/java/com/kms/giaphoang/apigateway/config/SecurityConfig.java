@@ -11,8 +11,13 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.*;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import reactor.core.publisher.Mono;
 import org.springframework.core.convert.converter.Converter;
+
+import java.util.Arrays;
 
 /**
  * @author : giaphoang
@@ -26,10 +31,10 @@ public class SecurityConfig {
     private static final String PRODUCT_URL = "/api/v1/product/**";
     private static final String CATEGORY_URL = "/api/v1/category/**";
     private static final String INVENTORY_URL = "/api/v1/inventory/**";
-    private static final String ORDER_URL = "/api/v1/product/**";
+    private static final String ORDER_URL = "/api/v1/order/**";
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-        http.csrf().disable();
+        http.cors().and().csrf().disable();
         // product service security
         http.authorizeExchange()
                 .pathMatchers(HttpMethod.POST, PRODUCT_URL).hasRole(Role.ADMIN.name())
@@ -55,7 +60,6 @@ public class SecurityConfig {
         http.authorizeExchange()
                 .pathMatchers("/eureka/**").permitAll()
                 .anyExchange().authenticated();
-
         http.oauth2ResourceServer()
                 .jwt()
                 .jwtAuthenticationConverter(grantedAuthoritiesExtractor());
@@ -65,5 +69,16 @@ public class SecurityConfig {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new GrantedAuthoritiesExtractor());
         return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
+    }
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(Arrays.asList("Authorization"));
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
