@@ -9,6 +9,11 @@ spring:
           uri: lb://product-service
           predicates:
             - Path=/api/v1/product/**, /api/v1/category/**
+        ### Image service
+        - id: image-service
+          uri: lb://image-service
+          predicates:
+            - Path=/api/v1/image/**
         ### Order service
         - id: order-service
           uri: lb://order-service

@@ -1,4 +1,4 @@
-package com.kms.giaphoang.apigateway;
+package com.kms.giaphoang.imageservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,14 +8,16 @@ import org.springframework.context.annotation.PropertySource;
 /**
  * @author : giaphoang
  * @mailto : hoanghuugiap241@gmail.com
- * @created : 8/29/2022, Monday
+ * @created : 9/7/2022, Wednesday
  * @project: spring-boot-stationery-chain
  **/
 @SpringBootApplication
 @EnableEurekaClient
-@PropertySource({"classpath:application.yml"})
-public class ApiGatewayApplication {
+@PropertySource({"classpath:application.yml", "classpath:secret.yml"})
+public class ImageServiceApplication {
+
     public static void main(String[] args) {
-        SpringApplication.run(ApiGatewayApplication.class, args);
+        SpringApplication.run(ImageServiceApplication.class, args);
     }
+
 }
