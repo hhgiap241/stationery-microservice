@@ -1,6 +1,5 @@
 package com.kms.giaphoang.orderservice.dto;
 
-import com.kms.giaphoang.orderservice.model.OrderLineItems;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

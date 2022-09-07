@@ -9,11 +9,9 @@ import com.kms.giaphoang.productservice.repository.CategoryRepository;
 import com.kms.giaphoang.productservice.repository.ProductRepository;
 import com.kms.giaphoang.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author : giaphoang
