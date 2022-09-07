@@ -1,0 +1,13 @@
+server:
+  port: 8083
+
+spring:
+  config:
+    import: secret.yml
+  application:
+    name: image-service
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka

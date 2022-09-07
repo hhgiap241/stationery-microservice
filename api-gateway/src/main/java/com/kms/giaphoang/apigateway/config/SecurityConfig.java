@@ -29,6 +29,7 @@ import java.util.Arrays;
 @EnableWebFluxSecurity
 public class SecurityConfig {
     private static final String PRODUCT_URL = "/api/v1/product/**";
+    private static final String IMAGE_URL = "/api/v1/image/**";
     private static final String CATEGORY_URL = "/api/v1/category/**";
     private static final String INVENTORY_URL = "/api/v1/inventory/**";
     private static final String ORDER_URL = "/api/v1/order/**";
@@ -41,6 +42,10 @@ public class SecurityConfig {
                 .pathMatchers(HttpMethod.PUT, PRODUCT_URL).hasRole(Role.ADMIN.name())
                 .pathMatchers(HttpMethod.DELETE, PRODUCT_URL).hasRole(Role.ADMIN.name())
                 .pathMatchers(HttpMethod.GET, PRODUCT_URL).hasAnyRole(Role.ADMIN.name(), Role.CUSTOMER.name());
+
+        // image service security
+        http.authorizeExchange()
+                .pathMatchers(HttpMethod.POST, IMAGE_URL).hasRole(Role.ADMIN.name());
 
         // category service security
         http.authorizeExchange()
