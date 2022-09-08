@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,10 @@ public class CartServiceImpl implements CartService {
         // if first time user access to cart => create cart
         Cart cart = cartRepository.findByUserId(userId).orElse(null);
         if (cart == null) {
-            cart = Cart.builder().build();
+            cart = Cart.builder()
+                    .userId(userId)
+                    .cartItems(Collections.emptyList())
+                    .build();
             cartRepository.save(cart);
         }
         return cart;
