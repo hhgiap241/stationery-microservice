@@ -28,4 +28,7 @@ public class Cart {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="cart_id", referencedColumnName = "id")
     private List<CartItem> cartItems = new ArrayList<>();
+    public void addItemToCart(CartItem cartItem){
+        cartItems.add(cartItem);
+    }
 }

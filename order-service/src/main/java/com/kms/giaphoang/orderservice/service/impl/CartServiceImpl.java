@@ -63,14 +63,18 @@ public class CartServiceImpl implements CartService {
                 .block();
         final boolean allProductInStock = Arrays.stream(inventoryDtos).allMatch(InventoryDto::getIsInStock);
         if (allProductInStock) {
+
             // if cart existed just extend the item
-            cartRepository.findByUserId(cartDto.getUserId())
-                    .ifPresent(cart -> cart.setCartItems(cartItems)); // maybe error here
+            Cart cart = cartRepository.findByUserId(cartDto.getUserId()).orElse(null);
             // if cart not existed => create it with the following item
-            Cart cart = Cart.builder()
-                    .userId(cartDto.getUserId())
-                    .cartItems(cartItems)
-                    .build();
+            if(cart == null){
+                cart = Cart.builder()
+                        .userId(cartDto.getUserId())
+                        .cartItems(cartItems)
+                        .build();
+            }else{
+                cartItems.forEach(cart::addItemToCart);
+            }
             return cartRepository.save(cart).getUserId();
         } else {
             throw new UpdateCartFailException("Update cart failed.");
