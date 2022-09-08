@@ -12,6 +12,7 @@ import java.util.List;
  * @project: spring-boot-stationery
  **/
 public interface InventoryService {
+    public List<Inventory> getAllInventory();
     public List<Inventory> isInStock(List<String> skuCode);
     public String saveInventory(InventoryDto inventoryDto);
     String updateInventory(InventoryDto inventoryDto);

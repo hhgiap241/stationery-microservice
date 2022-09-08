@@ -22,6 +22,13 @@ import java.util.stream.Collectors;
 public class InventoryController extends AbstractApplicationController {
     private final InventoryService inventoryService;
 
+    @GetMapping("/all")
+    public ResponseEntity<List<InventoryDto>> getAllInventory() {
+        return ResponseEntity.ok(inventoryService.getAllInventory().stream()
+                .map(inventory -> mapper.toInventoryDto(inventory))
+                .collect(Collectors.toList()));
+    }
+
     @GetMapping
     public ResponseEntity<List<InventoryDto>> isInStock(@RequestParam List<String> skuCode) {
         final List<Inventory> inventoryList = inventoryService.isInStock(skuCode);
@@ -29,17 +36,20 @@ public class InventoryController extends AbstractApplicationController {
                 .map(mapper::toInventoryDto)
                 .collect(Collectors.toList()));
     }
+
     @GetMapping("/{skuCode}")
     public ResponseEntity<InventoryDto> getInventoryBySkuCode(@PathVariable String skuCode) {
         final Inventory inventory = inventoryService.getInventoryBySkuCode(skuCode);
         return ResponseEntity.ok(mapper.toInventoryDto(inventory));
     }
+
     @PostMapping
-    public ResponseEntity<String> saveInventory(@RequestBody InventoryDto inventoryDto){
+    public ResponseEntity<String> saveInventory(@RequestBody InventoryDto inventoryDto) {
         return ResponseEntity.ok(inventoryService.saveInventory(inventoryDto));
     }
+
     @PutMapping
-    public ResponseEntity<String> updateInventory(@RequestBody InventoryDto inventoryDto){
+    public ResponseEntity<String> updateInventory(@RequestBody InventoryDto inventoryDto) {
         return ResponseEntity.ok(inventoryService.updateInventory(inventoryDto));
     }
 }
