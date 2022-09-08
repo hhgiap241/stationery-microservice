@@ -66,7 +66,7 @@ public class SecurityConfig {
                 .pathMatchers(HttpMethod.GET, CART_URL).hasAnyRole(Role.ADMIN.name(), Role.CUSTOMER.name())
                 .pathMatchers(HttpMethod.PUT, CART_URL).hasRole(Role.CUSTOMER.name())
                 .pathMatchers(HttpMethod.POST, CART_URL).hasRole(Role.CUSTOMER.name())
-                .pathMatchers(HttpMethod.DELETE, CART_URL).hasRole(Role.ADMIN.name());
+                .pathMatchers(HttpMethod.DELETE, CART_URL).hasRole(Role.CUSTOMER.name());
 
         // discovery server security
         http.authorizeExchange()

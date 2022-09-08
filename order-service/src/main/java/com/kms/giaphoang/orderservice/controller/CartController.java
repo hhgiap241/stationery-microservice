@@ -27,7 +27,12 @@ public class CartController extends AbstractApplicationController {
 
     @PutMapping
     public ResponseEntity<String> addToCart(@RequestBody CartDto cartDto) {
-        final String result = cartService.addToCart(cartDto);
+        final String result = cartService.addItemToCart(cartDto);
+        return ResponseEntity.ok(result);
+    }
+    @DeleteMapping
+    public ResponseEntity<String> removeFromCart(@RequestBody CartDto cartDto){
+        final String result = cartService.removeItemFromCart(cartDto);
         return ResponseEntity.ok(result);
     }
 }

@@ -3,6 +3,7 @@ package com.kms.giaphoang.orderservice.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * @author : giaphoang
@@ -11,7 +12,7 @@ import javax.persistence.*;
  * @project: spring-boot-stationery-chain
  **/
 @Entity
-@Table(name="cart_item")
+@Table(name = "cart_item")
 @Getter
 @Setter
 @Builder
@@ -25,4 +26,17 @@ public class CartItem {
     private String skuCode;
     private Double price;
     private Integer quantity;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CartItem cartItem = (CartItem) o;
+        return Objects.equals(skuCode, cartItem.getSkuCode());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(skuCode);
+    }
 }

@@ -11,5 +11,6 @@ import com.kms.giaphoang.orderservice.model.Cart;
  **/
 public interface CartService {
     Cart getCartByUserId(String userId);
-    String addToCart(CartDto cartDto);
+    String addItemToCart(CartDto cartDto);
+    String removeItemFromCart(CartDto cartDto);
 }
