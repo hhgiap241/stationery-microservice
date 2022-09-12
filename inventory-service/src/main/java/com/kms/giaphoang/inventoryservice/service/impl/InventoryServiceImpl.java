@@ -21,6 +21,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InventoryServiceImpl implements InventoryService {
     private final InventoryRepository inventoryRepository;
+
+    @Override
+    public List<Inventory> getAllInventory() {
+        return inventoryRepository.findAll();
+    }
+
     @Override
     public List<Inventory> isInStock(List<String> skuCode) {
         return inventoryRepository.findBySkuCodeIn(skuCode);

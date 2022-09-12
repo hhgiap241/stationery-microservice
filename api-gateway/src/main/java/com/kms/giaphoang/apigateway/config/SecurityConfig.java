@@ -31,6 +31,8 @@ public class SecurityConfig {
     private static final String CATEGORY_URL = "/api/v1/category/**";
     private static final String INVENTORY_URL = "/api/v1/inventory/**";
     private static final String ORDER_URL = "/api/v1/order/**";
+    private static final String CART_URL = "/api/v1/cart/**";
+
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         http.cors().and().csrf().disable();
@@ -59,6 +61,13 @@ public class SecurityConfig {
                 .pathMatchers(HttpMethod.DELETE, INVENTORY_URL).hasRole(Role.ADMIN.name())
                 .pathMatchers(HttpMethod.GET, INVENTORY_URL).hasAnyRole(Role.ADMIN.name(), Role.CUSTOMER.name());
 
+        // cart service security
+        http.authorizeExchange()
+                .pathMatchers(HttpMethod.GET, CART_URL).hasAnyRole(Role.ADMIN.name(), Role.CUSTOMER.name())
+                .pathMatchers(HttpMethod.PUT, CART_URL).hasRole(Role.CUSTOMER.name())
+                .pathMatchers(HttpMethod.POST, CART_URL).hasRole(Role.CUSTOMER.name())
+                .pathMatchers(HttpMethod.DELETE, CART_URL).hasRole(Role.CUSTOMER.name());
+
         // discovery server security
         http.authorizeExchange()
                 .pathMatchers("/eureka/**").permitAll()
@@ -68,11 +77,13 @@ public class SecurityConfig {
                 .jwtAuthenticationConverter(grantedAuthoritiesExtractor());
         return http.build();
     }
+
     private Converter<Jwt, Mono<AbstractAuthenticationToken>> grantedAuthoritiesExtractor() {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new GrantedAuthoritiesExtractor());
         return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
     }
+
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
