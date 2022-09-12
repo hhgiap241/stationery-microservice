@@ -1,6 +1,7 @@
 package com.kms.giaphoang.orderservice.service.impl;
 
 import com.kms.giaphoang.orderservice.dto.CartDto;
+import com.kms.giaphoang.orderservice.dto.CartItemDto;
 import com.kms.giaphoang.orderservice.dto.InventoryDto;
 import com.kms.giaphoang.orderservice.exception.UpdateCartFailException;
 import com.kms.giaphoang.orderservice.model.Cart;
@@ -11,11 +12,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import javax.swing.text.html.Option;
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author : giaphoang
@@ -131,6 +132,35 @@ public class CartServiceImpl implements CartService {
                     }
                 });
         // TODO: problem is after remove item, it just update the cart_id in cart_item table, not delete this line => fix later
+        return cartRepository.save(cart).getUserId();
+    }
+
+    @Override
+    public String updateCartItem(String userId, CartItemDto cartItemDto) {
+        final Cart cart = cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new UpdateCartFailException("Cart not found!"));
+        Optional.ofNullable(cart.getCartItems()).orElse(Collections.emptyList())
+                .stream()
+                .filter(item -> item.getId().equals(cartItemDto.getId()))
+                .findFirst()
+                .ifPresent(item -> {
+                    if(cartItemDto.getQuantity() == 0) {
+                        cart.removeItemFromCart(item);
+                    } else {
+                        item.setQuantity(cartItemDto.getQuantity());
+                        item.setPrice(cartItemDto.getPrice());
+                    }
+                });
+//        cart.getCartItems().stream().forEach(item -> {
+//            if (item.getId().equals(cartItemDto.getId())) {
+//                if(cartItemDto.getQuantity() == 0) {
+//                    cart.removeItemFromCart(item);
+//                } else {
+//                    item.setQuantity(cartItemDto.getQuantity());
+//                    item.setPrice(cartItemDto.getPrice());
+//                }
+//            }
+//        });
         return cartRepository.save(cart).getUserId();
     }
 }

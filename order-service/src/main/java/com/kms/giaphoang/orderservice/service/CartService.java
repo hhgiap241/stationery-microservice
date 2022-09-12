@@ -1,6 +1,7 @@
 package com.kms.giaphoang.orderservice.service;
 
 import com.kms.giaphoang.orderservice.dto.CartDto;
+import com.kms.giaphoang.orderservice.dto.CartItemDto;
 import com.kms.giaphoang.orderservice.model.Cart;
 
 /**
@@ -12,5 +13,6 @@ import com.kms.giaphoang.orderservice.model.Cart;
 public interface CartService {
     Cart getCartByUserId(String userId);
     String addItemToCart(CartDto cartDto);
+    String updateCartItem(String userId, CartItemDto cartItemDto);
     String removeItemFromCart(CartDto cartDto);
 }
