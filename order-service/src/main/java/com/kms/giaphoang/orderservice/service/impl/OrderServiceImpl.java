@@ -2,8 +2,11 @@ package com.kms.giaphoang.orderservice.service.impl;
 
 import com.kms.giaphoang.orderservice.dto.InventoryDto;
 import com.kms.giaphoang.orderservice.dto.OrderDto;
+import com.kms.giaphoang.orderservice.exception.UpdateCartFailException;
+import com.kms.giaphoang.orderservice.model.Cart;
 import com.kms.giaphoang.orderservice.model.Order;
 import com.kms.giaphoang.orderservice.model.OrderLineItems;
+import com.kms.giaphoang.orderservice.repository.CartRepository;
 import com.kms.giaphoang.orderservice.repository.OrderRepository;
 import com.kms.giaphoang.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,6 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
+    private final CartRepository cartRepository;
     private final WebClient.Builder webClientBuilder;
 
     @Override
@@ -38,6 +43,10 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
         Order order = Order.builder()
                 .userId(orderDto.getUserId())
+                .customerName(orderDto.getCustomerName())
+                .customerAddress(orderDto.getCustomerAddress())
+                .customerPhone(orderDto.getCustomerPhone())
+                .totalPrice(orderDto.getTotalPrice())
                 .orderLineItemsList(orderLineItems)
                 .build();
         // get skuCode list
@@ -61,7 +70,13 @@ public class OrderServiceImpl implements OrderService {
         System.out.println(block);
         final boolean allProductInStock = Arrays.stream(inventoryDtos).allMatch(InventoryDto::getIsInStock);
         if (allProductInStock) {
-            return orderRepository.save(order).getId().toString();
+            final String orderId = orderRepository.save(order).getId().toString();
+            // update cart
+            final Cart cart = cartRepository.findByUserId(orderDto.getUserId())
+                    .orElseThrow(() -> new UpdateCartFailException("Update cart fail"));
+            cart.setCartItems(Collections.emptyList());
+            cartRepository.save(cart);
+            return orderId;
         } else {
             throw new IllegalArgumentException("Create order failed. Some products is not available");
         }

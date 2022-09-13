@@ -14,7 +14,7 @@ import java.util.List;
  * @project: product-service
  **/
 public interface ProductService {
-//    public List<Product> getAllProducts();
+    public List<Product> getAllProducts();
     List<Product> findProductsByCategory(String categoryName);
     public String saveProduct(ProductDto productDto);
 
@@ -22,5 +22,5 @@ public interface ProductService {
 
     String updateProduct(String skuCode, ProductDto productDto);
     void deleteProduct(String skuCode);
-    Page<Product> getAllProducts(Pageable pageable);
+    Page<Product> getAllProductsWithPagination(Pageable pageable);
 }

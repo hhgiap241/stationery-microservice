@@ -36,19 +36,12 @@ public class ProductController extends AbstractApplicationController {
         return new ResponseEntity<>(productId, HttpStatus.CREATED);
     }
 
-    //    @GetMapping
-//    public ResponseEntity<List<ProductDto>> getAllProducts() {
-//        final List<ProductDto> products = productService.getAllProducts().stream()
-//                .map(mapper::toProductDto)
-//                .collect(Collectors.toList());
-//        return ResponseEntity.ok(products);
-//    }
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getAllProduct(
+    public ResponseEntity<Map<String, Object>> getAllProductsWithPagination(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("price").ascending());
-        final Page<Product> page1 = productService.getAllProducts(pageable);
+        final Page<Product> page1 = productService.getAllProductsWithPagination(pageable);
         List<Product> products = page1.getContent();
         if (products.isEmpty())
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -58,6 +51,13 @@ public class ProductController extends AbstractApplicationController {
         response.put("totalItems", page1.getTotalElements());
         response.put("totalPages", page1.getTotalPages());
         return ResponseEntity.ok(response);
+    }
+    @GetMapping("/all")
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
+        final List<ProductDto> products = productService.getAllProducts().stream()
+                .map(mapper::toProductDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{skuCode}")

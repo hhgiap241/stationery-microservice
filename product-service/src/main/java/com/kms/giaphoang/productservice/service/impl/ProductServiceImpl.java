@@ -46,10 +46,10 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(product).getId();
     }
 
-//    @Override
-//    public List<Product> getAllProducts() {
-//        return productRepository.findAll();
-//    }
+    @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
 
     @Override
     public Product getProductBySkuCode(String skuCode) {
@@ -90,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> getAllProducts(Pageable pageable) {
+    public Page<Product> getAllProductsWithPagination(Pageable pageable) {
         Page<Product> result = productRepository.findAll(pageable);
         return result;
     }
