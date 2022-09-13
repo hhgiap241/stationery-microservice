@@ -18,5 +18,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDto {
+    private String userId;
+    private String customerName;
+    private String customerAddress;
+    private String customerPhone;
+    private Double totalPrice;
     private List<OrderLineItemsDto> orderLineItemsDtoList;
 }

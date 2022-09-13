@@ -1,6 +1,7 @@
 package com.kms.giaphoang.inventoryservice.service.impl;
 
 import com.kms.giaphoang.inventoryservice.dto.InventoryDto;
+import com.kms.giaphoang.inventoryservice.dto.OrderLineItemsDto;
 import com.kms.giaphoang.inventoryservice.exception.InventoryExistedException;
 import com.kms.giaphoang.inventoryservice.exception.InventoryNotFoundException;
 import com.kms.giaphoang.inventoryservice.model.Inventory;
@@ -48,6 +49,16 @@ public class InventoryServiceImpl implements InventoryService {
                 .orElseThrow(()-> new InventoryNotFoundException("Inventory not found"));
         inventory.setQuantity(inventoryDto.getQuantity());
         return inventoryRepository.save(inventory).getId().toString();
+    }
+
+    @Override
+    public void updateAllInventory(List<OrderLineItemsDto> orderLineItemsDtoList) {
+        orderLineItemsDtoList.forEach(orderLineItemsDto -> {
+            final Inventory inventory = inventoryRepository.findBySkuCode(orderLineItemsDto.getSkuCode())
+                    .orElseThrow(()-> new InventoryNotFoundException("Inventory not found"));
+            inventory.setQuantity(inventory.getQuantity() - orderLineItemsDto.getQuantity());
+            inventoryRepository.save(inventory);
+        });
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.kms.giaphoang.productservice.repository;
 
 import com.kms.giaphoang.productservice.model.Category;
 import com.kms.giaphoang.productservice.model.Product;
+import org.springframework.data.domain.Page;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

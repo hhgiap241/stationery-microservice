@@ -9,8 +9,11 @@ import com.kms.giaphoang.productservice.repository.CategoryRepository;
 import com.kms.giaphoang.productservice.repository.ProductRepository;
 import com.kms.giaphoang.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -84,5 +87,11 @@ public class ProductServiceImpl implements ProductService {
         final Category category = categoryRepository.findByName(categoryName)
                 .orElseThrow(() -> new CategoryNotFoundException("Category " + categoryName + " not found."));
         return productRepository.findByCategory(category);
+    }
+
+    @Override
+    public Page<Product> getAllProductsWithPagination(Pageable pageable) {
+        Page<Product> result = productRepository.findAll(pageable);
+        return result;
     }
 }
