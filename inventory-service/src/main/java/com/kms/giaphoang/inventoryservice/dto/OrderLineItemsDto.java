@@ -1,11 +1,9 @@
-package com.kms.giaphoang.orderservice.dto;
+package com.kms.giaphoang.inventoryservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 /**
  * @author : giaphoang
@@ -17,7 +15,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDto {
-    private String userId;
-    private List<OrderLineItemsDto> orderLineItemsDtoList;
+public class OrderLineItemsDto {
+    private Long id;
+    private String skuCode;
+    private Double price;
+    private Integer quantity;
 }

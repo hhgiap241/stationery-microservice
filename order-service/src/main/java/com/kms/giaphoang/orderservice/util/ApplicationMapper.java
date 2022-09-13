@@ -39,6 +39,7 @@ public class ApplicationMapper {
 
     public OrderDto toOrderDto(Order order) {
         return OrderDto.builder()
+                .userId(order.getUserId())
                 .orderLineItemsDtoList(order.getOrderLineItemsList().stream()
                         .map(this::toOrderLineItemsDto)
                         .collect(Collectors.toList()))

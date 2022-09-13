@@ -1,6 +1,7 @@
 package com.kms.giaphoang.inventoryservice.controller;
 
 import com.kms.giaphoang.inventoryservice.dto.InventoryDto;
+import com.kms.giaphoang.inventoryservice.dto.OrderLineItemsDto;
 import com.kms.giaphoang.inventoryservice.model.Inventory;
 import com.kms.giaphoang.inventoryservice.service.InventoryService;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class InventoryController extends AbstractApplicationController {
                 .collect(Collectors.toList()));
     }
 
+
     @GetMapping("/{skuCode}")
     public ResponseEntity<InventoryDto> getInventoryBySkuCode(@PathVariable String skuCode) {
         final Inventory inventory = inventoryService.getInventoryBySkuCode(skuCode);
@@ -49,7 +51,8 @@ public class InventoryController extends AbstractApplicationController {
     }
 
     @PutMapping
-    public ResponseEntity<String> updateInventory(@RequestBody InventoryDto inventoryDto) {
-        return ResponseEntity.ok(inventoryService.updateInventory(inventoryDto));
+    public ResponseEntity<String> updateInventory(@RequestBody List<OrderLineItemsDto> orderLineItemsDtoList) {
+        inventoryService.updateAllInventory(orderLineItemsDtoList);
+        return ResponseEntity.ok("Updated");
     }
 }

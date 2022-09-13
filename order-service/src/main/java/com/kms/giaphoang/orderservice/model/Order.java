@@ -23,7 +23,7 @@ public class Order {
     @SequenceGenerator(name = "order_seq", sequenceName = "order_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_seq")
     private Long id;
-    private String orderNumber;
+    private String userId;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="order_id", referencedColumnName = "id")
     private List<OrderLineItems> orderLineItemsList;

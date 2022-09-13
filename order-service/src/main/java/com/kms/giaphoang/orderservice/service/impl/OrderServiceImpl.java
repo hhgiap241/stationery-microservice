@@ -37,9 +37,10 @@ public class OrderServiceImpl implements OrderService {
                         .build())
                 .collect(Collectors.toList());
         Order order = Order.builder()
-                .orderNumber(UUID.randomUUID().toString())
+                .userId(orderDto.getUserId())
                 .orderLineItemsList(orderLineItems)
                 .build();
+        // get skuCode list
         final List<String> skuCodeList = order.getOrderLineItemsList().stream()
                 .map(OrderLineItems::getSkuCode)
                 .collect(Collectors.toList());
@@ -50,11 +51,19 @@ public class OrderServiceImpl implements OrderService {
                 .retrieve()
                 .bodyToMono(InventoryDto[].class)
                 .block();
+        // call api to update inventory
+        final String block = webClientBuilder.build().put()
+                .uri("http://inventory-service/api/v1/inventory")
+                .bodyValue(orderDto.getOrderLineItemsDtoList())
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        System.out.println(block);
         final boolean allProductInStock = Arrays.stream(inventoryDtos).allMatch(InventoryDto::getIsInStock);
         if (allProductInStock) {
             return orderRepository.save(order).getId().toString();
         } else {
-            throw new IllegalArgumentException("Product is not available");
+            throw new IllegalArgumentException("Create order failed. Some products is not available");
         }
     }
 }
