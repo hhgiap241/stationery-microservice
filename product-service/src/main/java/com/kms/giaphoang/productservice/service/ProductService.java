@@ -2,6 +2,8 @@ package com.kms.giaphoang.productservice.service;
 
 import com.kms.giaphoang.productservice.dto.ProductDto;
 import com.kms.giaphoang.productservice.model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -12,7 +14,7 @@ import java.util.List;
  * @project: product-service
  **/
 public interface ProductService {
-    public List<Product> getAllProducts();
+//    public List<Product> getAllProducts();
     List<Product> findProductsByCategory(String categoryName);
     public String saveProduct(ProductDto productDto);
 
@@ -20,4 +22,5 @@ public interface ProductService {
 
     String updateProduct(String skuCode, ProductDto productDto);
     void deleteProduct(String skuCode);
+    Page<Product> getAllProducts(Pageable pageable);
 }
