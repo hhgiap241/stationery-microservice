@@ -68,6 +68,9 @@ public class SecurityConfig {
                 .pathMatchers(HttpMethod.POST, CART_URL).hasRole(Role.CUSTOMER.name())
                 .pathMatchers(HttpMethod.DELETE, CART_URL).hasRole(Role.CUSTOMER.name());
 
+        // order service security
+        http.authorizeExchange()
+                .pathMatchers(ORDER_URL).hasRole(Role.CUSTOMER.name());
         // discovery server security
         http.authorizeExchange()
                 .pathMatchers("/eureka/**").permitAll()
