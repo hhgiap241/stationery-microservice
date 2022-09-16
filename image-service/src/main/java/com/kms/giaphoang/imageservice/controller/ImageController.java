@@ -37,8 +37,8 @@ public class ImageController {
                 "api_secret", apiSecret,
                 "secure", true));
         final Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("use_filename", "true",
-                "resource_type", "auto"));
+                "resource_type", "auto", "folder", "stationery"));
         System.out.println(uploadResult);
-        return null;
+        return ResponseEntity.ok(uploadResult.get("url").toString());
     }
 }
