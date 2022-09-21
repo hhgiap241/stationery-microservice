@@ -52,3 +52,12 @@ resilience4j:
         wait-duration-in-open-state: 5s # the time the circuit breaker will stay open then switch to half open
         permitted-number-of-calls-in-half-open-state: 3 # the number of calls allowed in half open state
         automatic-transition-from-open-to-half-open-enabled: true # the circuit breaker will automatically transition from open to half open
+  timelimiter:
+    instances:
+      inventory:
+        timeout-duration: 3s # after 3 seconds, the call will be interrupted and a TimeoutException will be thrown
+  retry:
+    instances:
+      inventory:
+        max-attempts: 3 # the number of attempts to retry
+        wait-duration: 5s # the time to wait between retries

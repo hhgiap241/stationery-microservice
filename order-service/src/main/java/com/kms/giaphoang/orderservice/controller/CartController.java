@@ -5,6 +5,8 @@ import com.kms.giaphoang.orderservice.dto.CartItemDto;
 import com.kms.giaphoang.orderservice.model.Cart;
 import com.kms.giaphoang.orderservice.service.CartService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,8 @@ public class CartController extends AbstractApplicationController {
 
     @PostMapping
     @CircuitBreaker(name = "inventory", fallbackMethod = "addItemToCartFallback")
+//    @TimeLimiter(name = "inventory")
+//    @Retry(name = "inventory")
     public ResponseEntity<String> addToCart(@RequestBody CartDto cartDto) {
         final String result = cartService.addItemToCart(cartDto);
         return ResponseEntity.ok(result);
