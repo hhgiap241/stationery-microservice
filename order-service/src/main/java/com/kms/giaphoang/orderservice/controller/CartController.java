@@ -4,7 +4,11 @@ import com.kms.giaphoang.orderservice.dto.CartDto;
 import com.kms.giaphoang.orderservice.dto.CartItemDto;
 import com.kms.giaphoang.orderservice.model.Cart;
 import com.kms.giaphoang.orderservice.service.CartService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,19 +29,29 @@ public class CartController extends AbstractApplicationController {
         final Cart result = cartService.getCartByUserId(userId);
         return ResponseEntity.ok(mapper.toCartDto(result));
     }
+
     @PutMapping("/{userId}")
     public ResponseEntity<String> updateCartItem(@PathVariable String userId, @RequestBody CartItemDto cartItemDto) {
         final String result = cartService.updateCartItem(userId, cartItemDto);
         return ResponseEntity.ok(result);
     }
+
     @PostMapping
+    @CircuitBreaker(name = "inventory", fallbackMethod = "addItemToCartFallback")
+//    @TimeLimiter(name = "inventory")
+//    @Retry(name = "inventory")
     public ResponseEntity<String> addToCart(@RequestBody CartDto cartDto) {
         final String result = cartService.addItemToCart(cartDto);
         return ResponseEntity.ok(result);
     }
+
     @DeleteMapping
-    public ResponseEntity<String> removeFromCart(@RequestBody CartDto cartDto){
+    public ResponseEntity<String> removeFromCart(@RequestBody CartDto cartDto) {
         final String result = cartService.removeItemFromCart(cartDto);
         return ResponseEntity.ok(result);
+    }
+
+    public ResponseEntity<String> addItemToCartFallback(CartDto cartDto, RuntimeException runtimeException) {
+        return new ResponseEntity<>("Add item to cart failed. Check inventory service status.", HttpStatus.SERVICE_UNAVAILABLE);
     }
 }

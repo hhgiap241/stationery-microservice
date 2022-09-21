@@ -34,7 +34,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: *
+        include: "*"
   endpoint:
     health:
       show-details: always
@@ -44,11 +44,20 @@ resilience4j:
   circuitbreaker:
     instances:
       inventory:
-        registerHealthIndicator: true
-        event-consumer-buffer-size: 10
+        registerHealthIndicator: true # see the state: open, close, half open of the circuit breaker
+        event-consumer-buffer-size: 10 # the size of the event consumer buffer
         sliding-window-type: COUNT_BASED
-        sliding-window-size: 5
-        failure-rate-threshold: 50
-        wait-duration-in-open-state: 5s
-        permitted-number-of-calls-in-half-open-state: 3
-        automatic-transition-from-open-to-half-open-enabled: true
+        sliding-window-size: 5 # after 5 failures, the circuit breaker will switch to open state
+        failure-rate-threshold: 50 # after 50% of the last 5 calls failed, the circuit breaker will open
+        wait-duration-in-open-state: 5s # the time the circuit breaker will stay open then switch to half open
+        permitted-number-of-calls-in-half-open-state: 3 # the number of calls allowed in half open state
+        automatic-transition-from-open-to-half-open-enabled: true # the circuit breaker will automatically transition from open to half open
+  timelimiter:
+    instances:
+      inventory:
+        timeout-duration: 3s # after 3 seconds, the call will be interrupted and a TimeoutException will be thrown
+  retry:
+    instances:
+      inventory:
+        max-attempts: 3 # the number of attempts to retry
+        wait-duration: 5s # the time to wait between retries
