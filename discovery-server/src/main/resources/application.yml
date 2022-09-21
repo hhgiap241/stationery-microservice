@@ -7,3 +7,7 @@ eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
+
+logging:
+  file:
+    name: ./log/discovery-server.log

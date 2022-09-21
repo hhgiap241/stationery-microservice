@@ -58,4 +58,5 @@ logging:
           gateway.route.RouteDefinitionRouteLocator: INFO
         security: DEBUG
     root: INFO
-
+  file:
+    name: ./log/api-gateway.log

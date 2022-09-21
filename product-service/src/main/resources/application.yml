@@ -30,3 +30,5 @@ logging:
         web:
           filter:
             CommonsRequestLoggingFilter: DEBUG
+  file:
+    name: ./log/product-service.log
