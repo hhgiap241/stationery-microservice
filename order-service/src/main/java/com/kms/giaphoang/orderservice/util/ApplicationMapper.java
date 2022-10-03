@@ -39,6 +39,7 @@ public class ApplicationMapper {
 
     public OrderDto toOrderDto(Order order) {
         return OrderDto.builder()
+                .id(order.getId())
                 .userId(order.getUserId())
                 .customerName(order.getCustomerName())
                 .customerAddress(order.getCustomerAddress())

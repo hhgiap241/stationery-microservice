@@ -3,6 +3,8 @@ package com.kms.giaphoang.orderservice.repository;
 import com.kms.giaphoang.orderservice.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 /**
  * @author : giaphoang
  * @mailto : hoanghuugiap241@gmail.com
@@ -10,4 +12,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @project: spring-boot-stationery
  **/
 public interface OrderRepository extends JpaRepository<Order, Long> {
+    List<Order> findOrdersByUserId(String userId);
 }

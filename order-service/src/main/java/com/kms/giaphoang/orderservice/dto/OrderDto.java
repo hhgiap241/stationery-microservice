@@ -20,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDto {
+    private Long id;
     private String userId;
     private String customerName;
     private String customerAddress;

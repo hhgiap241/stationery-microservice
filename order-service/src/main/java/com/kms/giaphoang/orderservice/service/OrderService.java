@@ -1,7 +1,10 @@
 package com.kms.giaphoang.orderservice.service;
 
 import com.kms.giaphoang.orderservice.dto.OrderDto;
+import com.kms.giaphoang.orderservice.model.Order;
 import com.kms.giaphoang.orderservice.model.enums.OrderStatus;
+
+import java.util.List;
 
 /**
  * @author : giaphoang
@@ -12,4 +15,6 @@ import com.kms.giaphoang.orderservice.model.enums.OrderStatus;
 public interface OrderService {
     public String placeOrder(OrderDto orderDto);
     public String updateOrderStatus(Long orderId, OrderStatus status);
+    public List<Order> getOrdersByUserId(String userId);
+    public Order getOrderById(Long orderId);
 }
