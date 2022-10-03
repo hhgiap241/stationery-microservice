@@ -10,4 +10,5 @@ import com.kms.giaphoang.orderservice.dto.OrderDto;
  **/
 public interface OrderService {
     public String placeOrder(OrderDto orderDto);
+    public String updateOrderStatus(String orderId, String status);
 }

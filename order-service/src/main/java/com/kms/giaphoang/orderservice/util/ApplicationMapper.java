@@ -44,6 +44,8 @@ public class ApplicationMapper {
                 .customerAddress(order.getCustomerAddress())
                 .customerPhone(order.getCustomerPhone())
                 .totalPrice(order.getTotalPrice())
+                .createdAt(order.getCreatedAt())
+                .orderStatus(order.getOrderStatus())
                 .orderLineItemsDtoList(order.getOrderLineItemsList().stream()
                         .map(this::toOrderLineItemsDto)
                         .collect(Collectors.toList()))

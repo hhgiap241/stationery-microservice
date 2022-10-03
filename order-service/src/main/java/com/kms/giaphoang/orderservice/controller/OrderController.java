@@ -24,4 +24,5 @@ public class OrderController {
     public ResponseEntity<String> placeOrder(@RequestBody OrderDto orderDto){
         return ResponseEntity.ok(orderService.placeOrder(orderDto));
     }
+
 }

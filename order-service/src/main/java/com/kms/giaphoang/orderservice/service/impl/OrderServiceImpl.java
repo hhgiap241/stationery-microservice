@@ -47,6 +47,7 @@ public class OrderServiceImpl implements OrderService {
                 .customerAddress(orderDto.getCustomerAddress())
                 .customerPhone(orderDto.getCustomerPhone())
                 .totalPrice(orderDto.getTotalPrice())
+                .orderStatus(orderDto.getOrderStatus())
                 .orderLineItemsList(orderLineItems)
                 .build();
         // get skuCode list
@@ -80,5 +81,10 @@ public class OrderServiceImpl implements OrderService {
         } else {
             throw new IllegalArgumentException("Create order failed. Some products is not available");
         }
+    }
+
+    @Override
+    public String updateOrderStatus(String orderId, String status) {
+        return null;
     }
 }

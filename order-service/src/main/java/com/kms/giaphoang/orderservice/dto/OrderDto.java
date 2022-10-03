@@ -1,10 +1,12 @@
 package com.kms.giaphoang.orderservice.dto;
 
+import com.kms.giaphoang.orderservice.model.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -23,5 +25,7 @@ public class OrderDto {
     private String customerAddress;
     private String customerPhone;
     private Double totalPrice;
+    private LocalDateTime createdAt;
+    private OrderStatus orderStatus;
     private List<OrderLineItemsDto> orderLineItemsDtoList;
 }

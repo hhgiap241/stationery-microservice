@@ -1,8 +1,13 @@
 package com.kms.giaphoang.orderservice.model;
 
+import com.kms.giaphoang.orderservice.model.enums.OrderStatus;
 import lombok.*;
+import org.springframework.boot.actuate.audit.listener.AuditListener;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -12,6 +17,7 @@ import java.util.List;
  * @project: spring-boot-stationery
  **/
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name="t_order")
 @Getter
 @Setter
@@ -31,4 +37,9 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="order_id", referencedColumnName = "id")
     private List<OrderLineItems> orderLineItemsList;
+    @CreatedDate
+    @Column(name = "created_date", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 }
