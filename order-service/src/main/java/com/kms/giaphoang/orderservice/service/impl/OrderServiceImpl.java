@@ -2,10 +2,12 @@ package com.kms.giaphoang.orderservice.service.impl;
 
 import com.kms.giaphoang.orderservice.dto.InventoryDto;
 import com.kms.giaphoang.orderservice.dto.OrderDto;
+import com.kms.giaphoang.orderservice.exception.OrderNotFoundException;
 import com.kms.giaphoang.orderservice.exception.UpdateCartFailException;
 import com.kms.giaphoang.orderservice.model.Cart;
 import com.kms.giaphoang.orderservice.model.Order;
 import com.kms.giaphoang.orderservice.model.OrderLineItems;
+import com.kms.giaphoang.orderservice.model.enums.OrderStatus;
 import com.kms.giaphoang.orderservice.repository.CartRepository;
 import com.kms.giaphoang.orderservice.repository.OrderRepository;
 import com.kms.giaphoang.orderservice.service.OrderService;
@@ -84,7 +86,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public String updateOrderStatus(String orderId, String status) {
-        return null;
+    public String updateOrderStatus(Long orderId, OrderStatus status) {
+        final Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException("Order not found"));
+        order.setOrderStatus(status);
+        return orderRepository.save(order).getId().toString();
     }
 }

@@ -39,4 +39,9 @@ public class ExceptionController {
         });
         return ResponseEntity.badRequest().body(errors);
     }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException e) {
+        log.error(e.getMessage());
+        return ResponseEntity.badRequest().body(Map.of("Order_Error: ", e.getMessage()));
+    }
 }

@@ -1,13 +1,11 @@
 package com.kms.giaphoang.orderservice.controller;
 
 import com.kms.giaphoang.orderservice.dto.OrderDto;
+import com.kms.giaphoang.orderservice.model.enums.OrderStatus;
 import com.kms.giaphoang.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author : giaphoang
@@ -24,5 +22,9 @@ public class OrderController {
     public ResponseEntity<String> placeOrder(@RequestBody OrderDto orderDto){
         return ResponseEntity.ok(orderService.placeOrder(orderDto));
     }
-
+    @PutMapping("/{orderId}")
+    public ResponseEntity<String> updateOrderStatus(@PathVariable Long orderId, @RequestParam String status){
+        final OrderStatus orderStatus = OrderStatus.valueOf(status);
+        return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
+    }
 }
