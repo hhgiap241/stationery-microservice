@@ -17,4 +17,5 @@ public interface OrderService {
     public String updateOrderStatus(Long orderId, OrderStatus status);
     public List<Order> getOrdersByUserId(String userId);
     public Order getOrderById(Long orderId);
+    public List<Order> getAllOrders();
 }

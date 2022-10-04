@@ -41,4 +41,10 @@ public class OrderController extends AbstractApplicationController {
     public ResponseEntity<OrderDto> getOrderById(@PathVariable Long orderId){
         return ResponseEntity.ok(mapper.toOrderDto(orderService.getOrderById(orderId)));
     }
+    @GetMapping
+    public ResponseEntity<List<OrderDto>> getAllOrders(){
+        return ResponseEntity.ok(orderService.getAllOrders()
+                .stream().map(mapper::toOrderDto)
+                .collect(Collectors.toList()));
+    }
 }
